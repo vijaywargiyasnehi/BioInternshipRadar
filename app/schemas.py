@@ -11,7 +11,6 @@ class CompanyIn(BaseModel):
     internship_url: str = ""
     platform: str = "unknown"
     board_id: str = ""
-    network_contact: str = ""
     priority: str = "Medium"
     active: bool = True
     notes: str = ""
@@ -44,7 +43,7 @@ class OpportunityCandidate(BaseModel):
 
 
 class OpportunityImportIn(BaseModel):
-    """Payload for POST /api/opportunities/import (manual or browser-agent sourced)."""
+    """Payload for manual job entry via the dashboard."""
 
     company_name: str
     job_title: str
@@ -68,17 +67,13 @@ class OpportunityOut(BaseModel):
     posted_date: str
     detected_date: datetime
     last_seen_at: datetime
+    is_active: bool
     description: str
     source_platform: str
     source_url: str
     fit_score: int
     fit_score_explanation: str
     matched_keywords: str
-    status: str
-    notification_sent: bool
-    resume_generated: bool
-    resume_path: str
-    notes: str
 
     model_config = {"from_attributes": True}
 

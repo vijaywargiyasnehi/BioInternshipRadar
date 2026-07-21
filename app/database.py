@@ -1,7 +1,7 @@
-"""SQLAlchemy engine/session setup and DB initialization."""
+"""SQLAlchemy engine/session setup and DB initialization (SQLite only)."""
 from contextlib import contextmanager
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 from app.config import settings, BASE_DIR
@@ -16,10 +16,12 @@ def _resolve_database_url(url: str) -> str:
     return url
 
 
-engine = create_engine(
-    _resolve_database_url(settings.database_url),
-    connect_args={"check_same_thread": False},
-)
+def _make_engine(url: str):
+    resolved = _resolve_database_url(url)
+    return create_engine(resolved, connect_args={"check_same_thread": False})
+
+
+engine = _make_engine(settings.database_url)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, expire_on_commit=False)
 
 
@@ -28,22 +30,28 @@ class Base(DeclarativeBase):
 
 
 def run_migrations() -> None:
-    """Add columns introduced after initial schema creation — safe to call repeatedly."""
-    from sqlalchemy import inspect, text
+    """Add columns introduced after initial schema creation. Safe to call repeatedly."""
+    from sqlalchemy import inspect
     inspector = inspect(engine)
+
     with engine.connect() as conn:
-        for table, column, col_def in [
-            ("companies", "board_id", "VARCHAR DEFAULT ''"),
-        ]:
-            if table in inspector.get_table_names():
-                existing = {c["name"] for c in inspector.get_columns(table)}
-                if column not in existing:
-                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {col_def}"))
+        tables = inspector.get_table_names()
+
+        def _add_column(table: str, column: str, col_def: str) -> None:
+            if table not in tables:
+                return
+            existing = {c["name"] for c in inspector.get_columns(table)}
+            if column not in existing:
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {col_def}"))
+
+        _add_column("companies", "board_id", "VARCHAR DEFAULT ''")
+        _add_column("opportunities", "is_active", "BOOLEAN DEFAULT 1")
+
         conn.commit()
 
 
 def init_db() -> None:
-    from app import models  # noqa: F401 ensures models are registered
+    from app import models  # noqa: F401 — registers all ORM models before create_all
     Base.metadata.create_all(bind=engine)
     run_migrations()
 

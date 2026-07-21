@@ -1,4 +1,4 @@
-"""Exports opportunities, companies, and scan logs to CSV/Excel/YAML under exports/."""
+"""Exports shared job data to CSV/Excel/YAML under exports/."""
 import pandas as pd
 import yaml
 from sqlalchemy.orm import Session
@@ -14,18 +14,16 @@ def _export_dir():
 
 
 def export_opportunities_csv(session: Session) -> str:
-    opps = session.query(Opportunity).all()
-    df = pd.DataFrame([_opp_row(o) for o in opps])
+    rows = _build_opportunity_rows(session)
     out_path = _export_dir() / "opportunities.csv"
-    df.to_csv(out_path, index=False)
+    pd.DataFrame(rows).to_csv(out_path, index=False)
     return str(out_path)
 
 
 def export_opportunities_excel(session: Session) -> str:
-    opps = session.query(Opportunity).all()
-    df = pd.DataFrame([_opp_row(o) for o in opps])
+    rows = _build_opportunity_rows(session)
     out_path = _export_dir() / "opportunities.xlsx"
-    df.to_excel(out_path, index=False)
+    pd.DataFrame(rows).to_excel(out_path, index=False)
     return str(out_path)
 
 
@@ -39,7 +37,6 @@ def export_companies_csv(session: Session) -> str:
 
 def export_companies_yaml(session: Session) -> str:
     from app.services.company_service import export_companies_to_yaml
-
     out_path = _export_dir() / "companies_export.yaml"
     export_companies_to_yaml(session, out_path)
     return str(out_path)
@@ -53,21 +50,26 @@ def export_scan_logs_csv(session: Session) -> str:
     return str(out_path)
 
 
-def _opp_row(o: Opportunity) -> dict:
-    return {
-        "id": o.id,
-        "company_name": o.company_name,
-        "job_title": o.job_title,
-        "job_url": o.job_url,
-        "location": o.location,
-        "remote_status": o.remote_status,
-        "fit_score": o.fit_score,
-        "status": o.status,
-        "detected_date": o.detected_date,
-        "matched_keywords": o.matched_keywords,
-        "notification_sent": o.notification_sent,
-        "resume_generated": o.resume_generated,
-    }
+def _build_opportunity_rows(session: Session) -> list[dict]:
+    from sqlalchemy import select
+    opps = session.execute(select(Opportunity)).scalars().all()
+    return [
+        {
+            "id": o.id,
+            "company_name": o.company_name,
+            "job_title": o.job_title,
+            "job_url": o.job_url,
+            "location": o.location,
+            "remote_status": o.remote_status,
+            "fit_score": o.fit_score,
+            "source_platform": o.source_platform,
+            "detected_date": o.detected_date,
+            "posted_date": o.posted_date,
+            "matched_keywords": o.matched_keywords,
+            "is_active": o.is_active,
+        }
+        for o in opps
+    ]
 
 
 def _company_row(c: Company) -> dict:
@@ -77,7 +79,7 @@ def _company_row(c: Company) -> dict:
         "career_url": c.career_url,
         "internship_url": c.internship_url,
         "platform": c.platform,
-        "network_contact": c.network_contact,
+        "board_id": getattr(c, "board_id", "") or "",
         "priority": c.priority,
         "active": c.active,
         "last_scanned_at": c.last_scanned_at,

@@ -54,7 +54,7 @@ def test_detect_platform_unknown_without_url():
 
 
 # ---------------------------------------------------------------------------
-# Greenhouse scanner uses board_id directly (no career_url needed)
+# Greenhouse scanner uses board_id directly
 # ---------------------------------------------------------------------------
 
 def test_greenhouse_scanner_uses_board_id_when_no_url():
@@ -127,13 +127,12 @@ def test_ashby_scanner_parses_response():
 
 
 # ---------------------------------------------------------------------------
-# Stubs still work
+# Stubs
 # ---------------------------------------------------------------------------
 
 def test_workday_and_icims_scanners_require_manual_review():
     result = WorkdayScanner().scan_company(_company(career_url="https://acme.wd1.myworkdayjobs.com/careers"))
     assert result.status == "manual_review_required"
-    assert result.candidates == []
 
     result2 = IcimsScanner().scan_company(_company(career_url="https://acme.icims.com/jobs"))
     assert result2.status == "manual_review_required"

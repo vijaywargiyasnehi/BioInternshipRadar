@@ -43,7 +43,7 @@ def run_scan(session: Session, companies: list[Company] | None = None) -> ScanRu
     for company in targets:
         _scan_one_company(session, scan_run, company)
         # Only jitter when we made a real network request.
-        if company.career_url or company.internship_url or getattr(company, "board_id", None) or company.platform == "usajobs":
+        if company.career_url or company.internship_url or getattr(company, "board_id", None):
             jitter_sleep(1.0, 3.0)
 
     scan_run.ended_at = datetime.utcnow()

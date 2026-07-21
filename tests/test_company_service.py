@@ -17,12 +17,19 @@ def test_load_companies_yaml_returns_seeded_companies():
     assert "McKinsey" in names
 
 
+def test_load_companies_yaml_has_no_network_contact_field():
+    """network_contact must not appear on any loaded company schema."""
+    companies = load_companies_yaml()
+    for c in companies:
+        assert not hasattr(c, "network_contact"), "network_contact was found on a loaded company — it should be removed"
+
+
 def test_sync_companies_from_yaml_inserts_once(db_session):
     added_first = sync_companies_from_yaml(db_session)
     assert added_first > 0
 
     added_second = sync_companies_from_yaml(db_session)
-    assert added_second == 0  # already synced, no duplicates
+    assert added_second == 0
 
 
 def test_companies_missing_career_url(db_session):
@@ -34,7 +41,7 @@ def test_companies_missing_career_url(db_session):
     missing_names = {c.name for c in missing}
     assert "No URL Co" in missing_names
     assert "Has URL Co" not in missing_names
-    assert "Has Board ID Co" not in missing_names  # board_id counts as configured
+    assert "Has Board ID Co" not in missing_names
 
 
 def test_update_company(db_session):

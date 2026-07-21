@@ -1,14 +1,43 @@
+# Secrets — never commit these
 .env
+.streamlit/secrets.toml
+
+# Database files
 data/database.sqlite
+*.db
+data/*.db
+
+# Resumes and personal files — use Supabase Storage in production
 resumes/base/*.docx
 resumes/generated/
 resumes/archive/
+uploads/
+
+# Runtime artifacts
 logs/
 exports/
 __pycache__/
 *.pyc
+*.pyo
+
+# Python environments
 .venv/
 venv/
+env/
+
+# Testing
 .pytest_cache/
 *.egg-info/
+.coverage
+htmlcov/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Playwright browsers (installed separately, not committed)
+playwright/.local-browsers/

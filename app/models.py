@@ -16,12 +16,12 @@ class Company(Base):
     career_url: Mapped[str] = mapped_column(String(500), default="")
     internship_url: Mapped[str] = mapped_column(String(500), default="")
     platform: Mapped[str] = mapped_column(String(50), default="unknown")
+    board_id: Mapped[str] = mapped_column(String(100), default="")
+    # network_contact: kept for DB backward compat only — not used in any UI, schema, or export.
     network_contact: Mapped[str] = mapped_column(String(255), default="")
     priority: Mapped[str] = mapped_column(String(20), default="Medium")
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     notes: Mapped[str] = mapped_column(Text, default="")
-
-    board_id: Mapped[str] = mapped_column(String(100), default="")
 
     scan_interval_minutes: Mapped[int] = mapped_column(Integer, default=15)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
@@ -34,6 +34,8 @@ class Company(Base):
 
 
 class Opportunity(Base):
+    """Shared job listing — visible to all authenticated users.
+    User-specific tracking (status, notes, saved) lives in UserJob."""
     __tablename__ = "opportunities"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -49,6 +51,7 @@ class Opportunity(Base):
     posted_date: Mapped[str] = mapped_column(String(50), default="")
     detected_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     last_seen_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     description: Mapped[str] = mapped_column(Text, default="")
     source_platform: Mapped[str] = mapped_column(String(50), default="unknown")
@@ -57,16 +60,18 @@ class Opportunity(Base):
 
     fit_score: Mapped[int] = mapped_column(Integer, default=0)
     fit_score_explanation: Mapped[str] = mapped_column(Text, default="")
-    matched_keywords: Mapped[str] = mapped_column(Text, default="")  # comma-separated
-    ignored_keywords: Mapped[str] = mapped_column(Text, default="")  # comma-separated
+    matched_keywords: Mapped[str] = mapped_column(Text, default="")
+    ignored_keywords: Mapped[str] = mapped_column(Text, default="")
 
+    # Legacy per-user columns — kept for backward compat / migration only.
+    # New code reads from UserJob instead.
     status: Mapped[str] = mapped_column(String(50), default="New")
+    notes: Mapped[str] = mapped_column(Text, default="")
     notification_sent: Mapped[bool] = mapped_column(Boolean, default=False)
     notification_sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     resume_generated: Mapped[bool] = mapped_column(Boolean, default=False)
     resume_path: Mapped[str] = mapped_column(String(1000), default="")
     cover_letter_path: Mapped[str] = mapped_column(String(1000), default="")
-    notes: Mapped[str] = mapped_column(Text, default="")
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -117,7 +122,7 @@ class GeneratedDocument(Base):
     opportunity_id: Mapped[int | None] = mapped_column(ForeignKey("opportunities.id"), nullable=True)
     company_name: Mapped[str] = mapped_column(String(255), default="")
     job_title: Mapped[str] = mapped_column(String(500), default="")
-    document_type: Mapped[str] = mapped_column(String(50), default="resume")  # resume | cover_letter | outreach
+    document_type: Mapped[str] = mapped_column(String(50), default="resume")
     file_path: Mapped[str] = mapped_column(String(1000), default="")
     metadata_path: Mapped[str] = mapped_column(String(1000), default="")
     base_resume_path: Mapped[str] = mapped_column(String(1000), default="")

@@ -1,29 +1,103 @@
 # Target companies for BioInternshipRadar.
 #
 # platform: greenhouse | lever | ashby | workday | icims | company_static | unknown
-# board_id: Greenhouse token, Lever slug, or Ashby slug — scanner uses this directly,
-#           no career_url needed. Leave blank if unknown.
+# board_id: Greenhouse token, Lever slug, or Ashby slug — scanner uses this directly.
+#           Leave blank if unknown.
 #
 # Confidence notes:
-#   (verified)   — confirmed by live API call in prior session
+#   (verified)   — confirmed by live API call
 #   (high)       — widely documented / strong prior knowledge
-#   (medium)     — plausible based on company profile; verify at boards.greenhouse.io/<board_id>
-#   (workday)    — major pharma/med-device companies standardized on Workday; no public API
-#   (own-ats)    — uses a proprietary career portal; requires manual monitoring
+#   (medium)     — plausible; verify at boards.greenhouse.io/<board_id>
+#   (workday)    — Workday ATS; no public API — monitor career page manually
+#   (unknown)    — ATS not confirmed; needs verification before adding board_id
 
 companies:
 
-  # ---- Bio Companies ----
+  # ---- Bio Companies — Auto-scannable (Greenhouse) ----
+
+  - name: Moderna
+    category: Bio Companies
+    platform: greenhouse
+    board_id: modernatx
+    career_url: "https://boards.greenhouse.io/modernatx"
+    internship_url: ""
+    priority: High
+    active: true
+    notes: "Greenhouse ATS (high confidence)"
+
+  - name: Ginkgo Bioworks
+    category: Bio Companies
+    platform: greenhouse
+    board_id: ginkgobioworks
+    career_url: "https://boards.greenhouse.io/ginkgobioworks"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence — verify at boards.greenhouse.io/ginkgobioworks)"
+
+  - name: 10x Genomics
+    category: Bio Companies
+    platform: greenhouse
+    board_id: 10xgenomics
+    career_url: "https://boards.greenhouse.io/10xgenomics"
+    internship_url: ""
+    priority: High
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  - name: Natera
+    category: Bio Companies
+    platform: greenhouse
+    board_id: natera
+    career_url: "https://boards.greenhouse.io/natera"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  - name: Pacific Biosciences
+    category: Bio Companies
+    platform: greenhouse
+    board_id: pacificbiosciences
+    career_url: "https://boards.greenhouse.io/pacificbiosciences"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  - name: Recursion Pharmaceuticals
+    category: Bio Companies
+    platform: greenhouse
+    board_id: recursionpharma
+    career_url: "https://boards.greenhouse.io/recursionpharma"
+    internship_url: ""
+    priority: High
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  # ---- Bio Companies — Auto-scannable (Lever) ----
+
+  - name: Neuralink
+    category: Bio Companies
+    platform: lever
+    board_id: neuralink
+    career_url: "https://jobs.lever.co/neuralink"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Lever ATS (medium confidence)"
+
+  # ---- Bio Companies — Workday (manual monitoring) ----
+
   - name: Johnson & Johnson
     category: Bio Companies
     platform: workday
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "Workday ATS — no public API. Monitor manually at jobs.jnj.com"
+    notes: "Workday ATS — monitor at jobs.jnj.com"
 
   - name: Merck
     category: Bio Companies
@@ -31,10 +105,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "Workday ATS — no public API. Monitor manually at jobs.merck.com"
+    notes: "Workday ATS — monitor at jobs.merck.com"
 
   - name: Regeneron
     category: Bio Companies
@@ -42,7 +115,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at careers.regeneron.com"
@@ -53,10 +125,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: manu uncle
     priority: High
     active: true
-    notes: "Workday ATS — network contact: manu uncle. Monitor at careers.bms.com"
+    notes: "Workday ATS — monitor at careers.bms.com"
 
   - name: Pfizer
     category: Bio Companies
@@ -64,7 +135,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at pfizer.com/about/careers"
@@ -75,7 +145,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at gehealthcare.com/careers"
@@ -86,7 +155,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at bostonscientific.com/en-US/careers"
@@ -97,7 +165,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at stryker.com/en/careers"
@@ -108,7 +175,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "SAP SuccessFactors ATS — monitor at siemens-healthineers.com/careers"
@@ -119,7 +185,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at jobs.medtronic.com"
@@ -130,7 +195,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at jobs.bd.com"
@@ -141,7 +205,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at questdiagnostics.com/home/careers"
@@ -152,21 +215,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at hologic.com/about-hologic/careers"
-
-  - name: CooperSurgical
-    category: Bio Companies
-    platform: unknown
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "ATS unknown — check coopersurgical.com/careers"
 
   - name: Edwards Lifesciences
     category: Bio Companies
@@ -174,7 +225,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at edwards.com/global/about-edwards/careers"
@@ -185,7 +235,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at lilly.com/careers"
@@ -196,7 +245,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at novonordisk.com/careers"
@@ -207,7 +255,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at gene.com/careers or roche.com/careers"
@@ -218,7 +265,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at careers.amgen.com"
@@ -229,7 +275,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at careers.abbvie.com"
@@ -240,10 +285,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "Workday ATS — monitor at thermofisher.com/order/catalog/en/US/adirect/tf"
+    notes: "Workday ATS — monitor at thermofisher.com/careers"
 
   - name: MilliporeSigma
     category: Bio Companies
@@ -251,21 +295,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS (Merck KGaA brand) — monitor at emdgroup.com/en/careers"
-
-  - name: Vertex Pharmaceuticals
-    category: Bio Companies
-    platform: unknown
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "ATS unknown — check vrtx.com/en-us/careers or careers.vrtx.com"
 
   - name: AstraZeneca
     category: Bio Companies
@@ -273,22 +305,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: "mckenzie figur, aisiris sister"
     priority: High
     active: true
-    notes: "Workday ATS — network contacts: mckenzie figur, aisiris sister. Monitor at astrazeneca.com/careers"
-
-  - name: Moderna
-    category: Bio Companies
-    # Confirmed Greenhouse board — token validated via boards-api.greenhouse.io/v1/boards/modernatx/jobs
-    platform: greenhouse
-    board_id: modernatx
-    career_url: "https://boards.greenhouse.io/modernatx"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (high confidence)"
+    notes: "Workday ATS — monitor at astrazeneca.com/careers"
 
   - name: Dexcom
     category: Bio Companies
@@ -296,10 +315,31 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Workday ATS — monitor at dexcom.com/us-en/about-dexcom/careers"
+
+  # ---- Bio Companies — Unknown ATS (needs verification) ----
+
+  - name: CooperSurgical
+    category: Bio Companies
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "ATS unknown — check coopersurgical.com/careers"
+
+  - name: Vertex Pharmaceuticals
+    category: Bio Companies
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "ATS unknown — check vrtx.com/en-us/careers"
 
   - name: W.L. Gore
     category: Bio Companies
@@ -307,34 +347,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at gore.com/careers"
-
-  - name: Ginkgo Bioworks
-    category: Bio Companies
-    # Medium confidence — verify at boards.greenhouse.io/ginkgobioworks
-    platform: greenhouse
-    board_id: ginkgobioworks
-    career_url: "https://boards.greenhouse.io/ginkgobioworks"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (medium confidence — verify board_id)"
-
-  - name: Neuralink
-    category: Bio Companies
-    # Neuralink has used Lever historically — verify at jobs.lever.co/neuralink
-    platform: lever
-    board_id: neuralink
-    career_url: "https://jobs.lever.co/neuralink"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Lever ATS (medium confidence — verify board_id)"
 
   - name: A-Bio
     category: Bio Companies
@@ -342,58 +357,53 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — identify career page and set platform + board_id"
 
-  # ---- Startups / Healthcare Tech ----
+  # ---- Startups / Healthcare Tech — Auto-scannable ----
+
+  - name: Flatiron Health
+    category: Startups / Healthcare Tech
+    platform: greenhouse
+    board_id: flatironhealth
+    career_url: "https://boards.greenhouse.io/flatironhealth"
+    internship_url: ""
+    priority: High
+    active: true
+    notes: "Greenhouse ATS (verified)"
+
+  - name: Komodo Health
+    category: Startups / Healthcare Tech
+    platform: greenhouse
+    board_id: komodohealth
+    career_url: "https://boards.greenhouse.io/komodohealth"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  - name: Tempus AI
+    category: Startups / Healthcare Tech
+    platform: greenhouse
+    board_id: tempus
+    career_url: "https://boards.greenhouse.io/tempus"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  # ---- Startups / Healthcare Tech — Unknown ATS ----
+
   - name: Isomorphic Labs
     category: Startups / Healthcare Tech
     platform: unknown
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Google DeepMind spin-off — check isomorphiclabs.com/careers"
-
-  - name: Flatiron Health
-    category: Startups / Healthcare Tech
-    # VERIFIED via live API call: boards-api.greenhouse.io/v1/boards/flatironhealth/jobs
-    platform: greenhouse
-    board_id: flatironhealth
-    career_url: "https://boards.greenhouse.io/flatironhealth"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (verified)"
-
-  - name: Komodo Health
-    category: Startups / Healthcare Tech
-    # Medium confidence — verify at boards.greenhouse.io/komodohealth
-    platform: greenhouse
-    board_id: komodohealth
-    career_url: "https://boards.greenhouse.io/komodohealth"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (medium confidence — verify board_id)"
-
-  - name: Tempus AI
-    category: Startups / Healthcare Tech
-    # Medium confidence — verify at boards.greenhouse.io/tempus
-    platform: greenhouse
-    board_id: tempus
-    career_url: "https://boards.greenhouse.io/tempus"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (medium confidence — verify board_id)"
 
   - name: Synchron
     category: Startups / Healthcare Tech
@@ -401,7 +411,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check synchron.com/careers"
@@ -412,7 +421,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check openbci.com/community/careers"
@@ -423,43 +431,29 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check altoslabs.com/careers"
 
-  - name: ARS Pharmaceuticals, Inc.
+  - name: ARS Pharmaceuticals
     category: Startups / Healthcare Tech
     platform: unknown
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check arspharma.com/careers"
 
-  - name: BioLife Solutions, Inc.
+  - name: BioLife Solutions
     category: Startups / Healthcare Tech
     platform: unknown
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check biolifesolutions.com/careers"
-
-  - name: CoreLogic
-    category: Startups / Healthcare Tech
-    platform: unknown
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "ATS unknown — verify this is life-sciences related"
 
   - name: Rise Therapeutics
     category: Startups / Healthcare Tech
@@ -467,21 +461,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check risetherapeutics.com/careers"
-
-  - name: Phylo
-    category: Startups / Healthcare Tech
-    platform: unknown
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "ATS unknown — identify career page"
 
   - name: Cortical Labs
     category: Startups / Healthcare Tech
@@ -489,74 +471,82 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "ATS unknown — check corticallabs.com/careers"
 
-  - name: Merge Labs
-    category: Startups / Healthcare Tech
-    platform: unknown
+  # ---- Consulting Companies — Auto-scannable ----
+
+  - name: ZS Associates
+    category: Consulting Companies
+    platform: greenhouse
+    board_id: zsassociates
+    career_url: "https://boards.greenhouse.io/zsassociates"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  - name: Veeva Systems
+    category: Consulting Companies
+    platform: greenhouse
+    board_id: veeva
+    career_url: "https://boards.greenhouse.io/veeva"
+    internship_url: ""
+    priority: Medium
+    active: true
+    notes: "Greenhouse ATS (medium confidence)"
+
+  # ---- Consulting Companies — Workday ----
+
+  - name: IQVIA
+    category: Consulting Companies
+    platform: workday
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "ATS unknown — identify career page"
+    notes: "Workday ATS — monitor at jobs.iqvia.com"
 
-  - name: Periodic Labs
-    category: Startups / Healthcare Tech
-    platform: unknown
+  - name: UnitedHealth Group / Optum
+    category: Consulting Companies
+    platform: workday
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "ATS unknown — identify career page"
+    notes: "Workday ATS — monitor at careers.uhg.com"
 
-  - name: Medra
-    category: Startups / Healthcare Tech
-    platform: unknown
+  - name: Guidehouse
+    category: Consulting Companies
+    platform: workday
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "ATS unknown — identify career page"
+    notes: "Workday ATS — monitor at guidehouse.com/careers"
 
-  - name: Constellation Systems, Inc.
-    category: Startups / Healthcare Tech
-    platform: unknown
+  - name: CVS Health / Aetna
+    category: Consulting Companies
+    platform: workday
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
-    notes: "ATS unknown — identify career page"
+    notes: "Workday ATS — monitor at jobs.cvshealth.com"
 
-  - name: Vistim Labs
-    category: Startups / Healthcare Tech
-    platform: unknown
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "ATS unknown — identify career page"
+  # ---- Consulting Companies — Unknown ATS ----
 
-  # ---- Consulting Companies ----
   - name: ClearView Healthcare Partners
     category: Consulting Companies
     platform: unknown
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Small boutique — check clearviewhcp.com/careers"
@@ -567,56 +557,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at lek.com/join-us"
-
-  - name: ZS Associates
-    category: Consulting Companies
-    # Medium confidence — verify at boards.greenhouse.io/zsassociates
-    platform: greenhouse
-    board_id: zsassociates
-    career_url: "https://boards.greenhouse.io/zsassociates"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (medium confidence — verify board_id)"
-
-  - name: IQVIA
-    category: Consulting Companies
-    platform: workday
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Workday ATS — monitor at jobs.iqvia.com"
-
-  - name: Veeva Systems
-    category: Consulting Companies
-    # Medium confidence — verify at boards.greenhouse.io/veeva
-    platform: greenhouse
-    board_id: veeva
-    career_url: "https://boards.greenhouse.io/veeva"
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Greenhouse ATS (medium confidence — verify board_id)"
-
-  - name: UnitedHealth Group / Optum
-    category: Consulting Companies
-    platform: workday
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Workday ATS — monitor at careers.uhg.com"
 
   - name: McKinsey
     category: Consulting Companies
@@ -624,7 +567,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at mckinsey.com/careers"
@@ -635,7 +577,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at accenture.com/us-en/careers"
@@ -646,7 +587,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at deloitte.com/us/en/careers"
@@ -657,7 +597,6 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Small boutique — check trinitylifesciences.com/careers"
@@ -668,21 +607,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Small boutique — check putassoc.com/careers"
-
-  - name: Guidehouse
-    category: Consulting Companies
-    platform: workday
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Workday ATS — monitor at guidehouse.com/careers"
 
   - name: EY
     category: Consulting Companies
@@ -690,21 +617,9 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at ey.com/en_us/careers"
-
-  - name: CVS Health / Aetna
-    category: Consulting Companies
-    platform: workday
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: Medium
-    active: true
-    notes: "Workday ATS — monitor at jobs.cvshealth.com"
 
   - name: DaVita
     category: Consulting Companies
@@ -712,7 +627,80 @@ companies:
     board_id: ""
     career_url: ""
     internship_url: ""
-    network_contact: ""
     priority: Medium
     active: true
     notes: "Own ATS — monitor at davita.com/join-us"
+
+  # ---- Pending — needs ATS verification before activating ----
+  # To verify: visit boards.greenhouse.io/<slug> or jobs.lever.co/<slug>.
+  # If the job board loads, move the entry above and set active: true.
+
+  - name: CoreLogic
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — verify this is life-sciences related and find career page"
+
+  - name: Phylo
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — identify career page"
+
+  - name: Merge Labs
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — identify career page"
+
+  - name: Periodic Labs
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — identify career page"
+
+  - name: Medra
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — identify career page"
+
+  - name: Constellation Systems
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — identify career page"
+
+  - name: Vistim Labs
+    category: Startups / Healthcare Tech
+    platform: unknown
+    board_id: ""
+    career_url: ""
+    internship_url: ""
+    priority: Low
+    active: false
+    notes: "Pending — identify career page"

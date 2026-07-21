@@ -21,7 +21,11 @@ def load_companies_yaml(path=None) -> list[CompanyIn]:
     with open(path, "r", encoding="utf-8") as f:
         raw = yaml.safe_load(f) or {}
     items = raw.get("companies", [])
-    return [CompanyIn(**item) for item in items]
+    cleaned = []
+    for item in items:
+        item.pop("network_contact", None)  # silently discard legacy field
+        cleaned.append(CompanyIn(**item))
+    return cleaned
 
 
 def sync_companies_from_yaml(session: Session, path=None) -> int:
@@ -40,8 +44,6 @@ def sync_companies_from_yaml(session: Session, path=None) -> int:
             session.flush()
             added += 1
         else:
-            # Propagate config fields from the YAML so editing companies.yaml
-            # (e.g. adding a board_id) takes effect on the next startup.
             for field in _YAML_CONFIG_FIELDS:
                 yaml_val = getattr(c, field, None)
                 if yaml_val is not None and hasattr(existing, field):
@@ -64,7 +66,6 @@ def export_companies_to_yaml(session: Session, path=None) -> None:
                 "board_id": getattr(c, "board_id", "") or "",
                 "career_url": c.career_url,
                 "internship_url": c.internship_url,
-                "network_contact": c.network_contact,
                 "priority": c.priority,
                 "active": c.active,
                 "notes": c.notes,

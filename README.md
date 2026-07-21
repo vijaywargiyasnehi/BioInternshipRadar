@@ -1,18 +1,38 @@
-# BioInternship Radar
+﻿# BioInternship Radar
 
-Automated internship tracker for bioengineering, biomedical, pharma, medical devices, regulatory, consulting, and adjacent fields. Discovers opportunities automatically from multiple sources, scores them for relevance, and surfaces them in a searchable Streamlit dashboard.
+Automated internship tracker for bioengineering, biomedical, pharma, medical devices, regulatory, consulting, and adjacent fields. Discovers opportunities automatically from Greenhouse, Lever, and Ashby job-board APIs, scores them for bioengineering relevance, and surfaces them in a private per-user Streamlit dashboard.
 
 ---
 
 ## What it does
 
-- **Automatically discovers internships** from Greenhouse, Lever, Ashby, and USAJobs job-board APIs — no manual link entry required.
-- **Scores each role** for relevance to a bioengineering student profile (keywords, company priority, location, ignored terms).
-- **Deduplicates** across scans using URL/content hashes so re-scans never create duplicate rows.
-- **Tracks your applications** — save, apply, add notes, and track status per opportunity. Refreshes never erase your application history.
+- **Automatically discovers internships** from Greenhouse, Lever, and Ashby job-board APIs — no manual link entry required.
+- **Scores each role** for relevance to a bioengineering student profile using keywords, company priority, and job type.
+- **Deduplicates** across scans — re-scans never create duplicate rows.
+- **Per-user application tracking** — saved jobs, status, notes, and applied dates are completely private per account.
 - **Sends notifications** via email, Telegram, or Slack for high-fit new postings.
-- **Tailors your resume** rule-based (or LLM-assisted) against a base .docx file — never fabricates experience.
-- Runs on **local SQLite**; all data stays on your machine.
+- **Tailors your resume** rule-based (or LLM-assisted) against a base .docx — never fabricates experience.
+- Local **SQLite** for development; **PostgreSQL / Supabase** for production.
+
+---
+
+## Authentication
+
+Uses Streamlit native OIDC — sign in with Google. No username/password system. Identity is sourced from the OIDC `sub` claim only, never from forms or URL parameters. Unauthenticated visitors see only the public landing page.
+
+---
+
+## Per-user data isolation
+
+| Data | Visibility |
+|---|---|
+| Job listings (title, company, score, apply link) | All authenticated users |
+| Application status, notes, saved flag | Your account only |
+| Applied date, follow-up date, resume version | Your account only |
+| Exports (CSV / Excel) | Your data only |
+| Scan logs, source coverage | All authenticated users |
+
+Isolation is enforced in the database layer (every read/write filters on `user_id`), not only in the UI.
 
 ---
 
@@ -20,51 +40,25 @@ Automated internship tracker for bioengineering, biomedical, pharma, medical dev
 
 | Provider | How it works | Config needed |
 |---|---|---|
-| **Greenhouse** | `boards-api.greenhouse.io/v1/boards/{board_id}/jobs` | `platform: greenhouse` + `board_id: <token>` in companies.yaml |
-| **Lever** | `api.lever.co/v0/postings/{slug}?mode=json` | `platform: lever` + `board_id: <slug>` in companies.yaml |
-| **Ashby** | POST to `jobs.ashbyhq.com/api/non-user-facing/job-board/job-postings` | `platform: ashby` + `board_id: <slug>` in companies.yaml |
-| **USAJobs** | Searches `data.usajobs.gov/api/search` for bioengineering internships at NIH, FDA, CDC, DoD, etc. | Free API key — set `USAJOBS_API_KEY` + `USAJOBS_EMAIL` in `.env` |
-| **Workday** | No public API — monitor career pages manually | Set `platform: workday` as a reminder |
-| **Static / Playwright** | HTML scraping fallback for any company with a `career_url` | Set `career_url` in companies.yaml |
+| **Greenhouse** | `boards-api.greenhouse.io/v1/boards/{board_id}/jobs` | `platform: greenhouse` + `board_id: <token>` |
+| **Lever** | `api.lever.co/v0/postings/{slug}?mode=json` | `platform: lever` + `board_id: <slug>` |
+| **Ashby** | POST to `jobs.ashbyhq.com` non-user-facing API | `platform: ashby` + `board_id: <slug>` |
+| **Workday** | No public API — manual monitoring reminder | `platform: workday` |
 
 ---
 
-## Quick start
+## Quick start (local)
 
 ```bash
-# 1. Create and activate a virtual environment
 python -m venv .venv
-.venv\Scripts\activate         # Windows
-# source .venv/bin/activate    # macOS/Linux
-
-# 2. Install dependencies
+.venv\Scripts\activate          # Windows  /  source .venv/bin/activate  (macOS/Linux)
 pip install -r requirements.txt
-
-# 3. Configure
-copy .env.example .env         # Windows
-# cp .env.example .env         # macOS/Linux
-# Edit .env — defaults work for a first run
-
-# 4. Launch the dashboard
-python run_dashboard.py        # opens http://localhost:8501
-
-# 5. Click "Refresh Jobs" in the dashboard, or run from terminal:
-python run_scanner.py --all
+copy .env.example .env
+copy .streamlit\secrets.example.toml .streamlit\secrets.toml  # edit with your OAuth creds
+streamlit run app/dashboard.py
 ```
 
-Double-click **BioInternship Radar** on your Desktop to launch (Windows shortcut).
-
----
-
-## Automated discovery — how it works
-
-1. **Refresh Jobs** (button in the dashboard) or `python run_scanner.py --all` iterates all active companies.
-2. The scanner router dispatches each company to the right provider based on `platform` + `board_id`.
-3. Each provider fetches current postings via a public API (no scraping, no auth bypass).
-4. Results are **filtered** to internship/co-op/fellowship titles (`INTERNSHIP_ONLY=true` in .env).
-5. Each job is **scored** against `data/keywords.yaml` (keywords, location, company priority).
-6. New jobs are stored; existing jobs update `last_seen_at` without duplicating.
-7. Jobs above `MIN_NOTIFICATION_FIT_SCORE` trigger notifications (if configured).
+Without OAuth configured, the app runs in local-dev mode with a warning banner.
 
 ---
 
@@ -76,118 +70,111 @@ Edit `data/companies.yaml`:
 companies:
   - name: Example Biotech
     category: Bio Companies
-    platform: greenhouse          # greenhouse | lever | ashby | usajobs | workday | unknown
-    board_id: examplebiotech      # ATS token/slug — the scanner uses this directly
-    career_url: ""                # optional if board_id is set
-    priority: Medium              # High | Medium | Low
+    platform: greenhouse
+    board_id: examplebiotech
+    priority: Medium
     active: true
-    notes: ""
 ```
 
-**Finding board IDs:**
-- Greenhouse: go to `https://boards.greenhouse.io/<slug>` — if it shows a job board, that slug is your `board_id`.
-- Lever: go to `https://jobs.lever.co/<slug>` — same pattern.
-- Ashby: go to `https://jobs.ashbyhq.com/<slug>`.
+Finding board IDs:
+- Greenhouse: visit `https://boards.greenhouse.io/<slug>`
+- Lever: visit `https://jobs.lever.co/<slug>`
+- Ashby: visit `https://jobs.ashbyhq.com/<slug>`
 
-The companies.yaml ships with verified and best-effort board IDs pre-filled. Board IDs marked "(medium confidence)" in the `notes` field may fail if the company changed ATS vendors — check the Scan Logs page for errors and correct them.
+If the page loads with job listings, that slug is your `board_id`.
 
 ---
 
-## USAJobs (federal internships — NIH, FDA, CDC, DoD)
-
-Register at [developer.usajobs.gov](https://developer.usajobs.gov) (free, instant approval), then add to `.env`:
-
-```
-USAJOBS_API_KEY=your_key_here
-USAJOBS_EMAIL=your@email.com
-```
-
-The "Federal Agencies (USAJobs)" entry in companies.yaml then automatically searches 14 bioengineering queries across all federal agencies — NIH, FDA, CDC, BARDA, DoD, and more. No per-agency config needed.
-
----
-
-## Running locally
+## Running the scanner
 
 ```bash
-# Dashboard only
-python run_dashboard.py
+python run_scanner.py --all     # scan all active companies now
+python run_scanner.py           # scan companies due per interval
+python scheduler.py             # continuous background scheduler
+```
 
-# One-shot scan (companies due per their interval)
-python run_scanner.py
+Or click **Refresh Jobs** in the dashboard.
 
-# One-shot scan of all active companies
-python run_scanner.py --all
+---
 
-# Continuous scheduler (repeats every SCAN_INTERVAL_MINUTES)
-python scheduler.py
+## Google OAuth setup
+
+1. [Google Cloud Console](https://console.cloud.google.com/apis/credentials) → Create OAuth 2.0 Client ID (Web application).
+2. Authorized redirect URIs:
+   - Local: `http://localhost:8501/oauth2callback`
+   - Production: `https://biointernshipradar-sqtgcj2of9akzkknqfral3.streamlit.app/oauth2callback`
+3. Copy `client_id` and `client_secret` into `.streamlit/secrets.toml`:
+
+```toml
+[auth]
+redirect_uri = "http://localhost:8501/oauth2callback"
+cookie_secret = "CHANGE_ME_32_CHARS"
+
+[auth.google]
+client_id = "YOUR_CLIENT_ID.apps.googleusercontent.com"
+client_secret = "YOUR_CLIENT_SECRET"
+server_metadata_url = "https://accounts.google.com/.well-known/openid-configuration"
 ```
 
 ---
 
-## Configuration reference (`.env`)
+## Supabase / PostgreSQL setup
 
-| Variable | Default | Description |
-|---|---|---|
-| `DATABASE_URL` | `sqlite:///data/database.sqlite` | SQLite path |
-| `SCAN_INTERVAL_MINUTES` | `15` | Scheduler interval |
-| `INTERNSHIP_ONLY` | `true` | Only store internship/co-op/fellowship-titled roles |
-| `MIN_NOTIFICATION_FIT_SCORE` | `60` | Minimum score to trigger a notification |
-| `USAJOBS_API_KEY` | *(blank)* | USAJobs API key (free registration) |
-| `USAJOBS_EMAIL` | *(blank)* | Email registered with USAJobs API |
-| `EMAIL_ENABLED` | `false` | Email notifications via SMTP |
-| `TELEGRAM_ENABLED` | `false` | Telegram notifications |
-| `SLACK_ENABLED` | `false` | Slack webhook notifications |
-| `LLM_PROVIDER` | `none` | `openai` / `anthropic` / `local` / `none` |
+1. Create a free project at [supabase.com](https://supabase.com).
+2. Project Settings → Database → Connection string (URI).
+3. Add to `.streamlit/secrets.toml` and Streamlit Cloud Secrets:
+
+```toml
+[database]
+url = "postgresql://postgres:[password]@db.[ref].supabase.co:5432/postgres"
+```
+
+`init_db()` creates all tables on first run.
 
 ---
 
-## Application tracking
+## Deploying to Streamlit Community Cloud
 
-Every opportunity stores:
+1. Push repo to GitHub (`.gitignore` excludes `.env`, `secrets.toml`, `database.sqlite`).
+2. [share.streamlit.io](https://share.streamlit.io) → New app → repo `vijaywargiyasnehi/BioInternshipRadar`, branch `master`, main file `app/dashboard.py`.
+3. Advanced settings → Secrets — paste contents of `.streamlit/secrets.toml`.
+4. Deploy.
 
-| Field | Description |
-|---|---|
-| Status | New → Reviewing → Interested → Resume Generated → Reached Out → Applied → Rejected / Archived |
-| Notes | Free-text notes; editable in Opportunity Detail |
-| Resume path | Set after generating a tailored resume |
-| Notification sent | Timestamp of alert |
-
-Application data is **never overwritten by refreshes** — only `last_seen_at` and `job_title` are updated on re-scan.
+For continuous scanning, run `scheduler.py` on a VPS or GitHub Actions cron.
 
 ---
 
-## Data files
+## Migrating existing data (one-time)
 
-| File | Purpose |
-|---|---|
-| `data/companies.yaml` | Company list with platform + board_id |
-| `data/keywords.yaml` | Relevance keywords by category (expand to improve scoring) |
-| `data/ignored_keywords.yaml` | Keywords that penalize the fit score |
-| `data/locations.yaml` | Preferred locations for scoring |
-| `data/student_profile.yaml` | Your profile (skills, target roles, experience) |
-| `resumes/base/base_resume.docx` | Your base resume for tailoring |
+After the original owner logs in for the first time:
+
+```bash
+python scripts/migrate_owner_data.py --email you@gmail.com
+```
+
+Copies legacy `Opportunity.status` / `.notes` into `UserJob` records scoped to your account. New users are unaffected.
 
 ---
 
-## Deploying on Streamlit Community Cloud
+## Privacy and security
 
-1. Push repo to GitHub (`.gitignore` excludes `.env` and `data/database.sqlite`).
-2. Add secrets in the Streamlit Cloud dashboard matching your `.env` variables.
-3. Set main file to `app/dashboard.py`.
-4. For continuous scanning, run `scheduler.py` separately (VPS or GitHub Actions cron).
+- Identity sourced from OIDC `sub` only — never from forms, query params, or session state.
+- Every database query involving application tracking filters on `user_id`.
+- Exports contain only the authenticated user's own tracking data.
+- Secrets are in `.gitignore` and never committed.
+- Resumes/uploads should use Supabase Storage in production (not the local filesystem).
 
 ---
 
 ## Known limitations
 
-- **Workday** (most large pharma/med-device) has no public API — those companies appear in the list as reminders to check manually.
-- **Board IDs marked "(medium confidence)"** are best-effort guesses. If a scan errors, check Scan Logs, visit `boards.greenhouse.io/<board_id>` to verify, then correct the YAML.
-- **USAJobs** requires free registration. Some federal titles say "Student Trainee" instead of "Intern" — these still match the scanner's search terms.
-- **Playwright** for JS-heavy pages requires `python -m playwright install chromium` after pip install.
-- Rate limits: 1–3 second jitter between company requests; large boards (100+ jobs) may take several seconds.
+- Workday (most large pharma/med-device) has no public API — monitor career pages manually.
+- Board IDs marked "(medium confidence)" may fail if a company changed ATS — check Scan Logs.
+- Playwright for JS-heavy pages is not available on Streamlit Community Cloud.
+- Streamlit Cloud local filesystem resets on redeploy — use PostgreSQL for production.
 
 ---
 
 ## Legal
 
-All data sources used are **public, read-only APIs** explicitly offered by each vendor for job seekers. No authentication bypass, credentials, or ToS violation is involved. Job postings are fetched and stored locally; they are not redistributed.
+All sources used are public, read-only APIs offered for job seekers. No authentication bypass or ToS violation is involved.
