@@ -1,0 +1,16 @@
+{
+  "company": "Regeneron",
+  "role_title": "Process Development Intern",
+  "job_url": "https://regeneron.com/jobs/123",
+  "generated_at": "2026-06-19T14:32:10.123456",
+  "base_resume_used": "resumes/base/base_resume.docx",
+  "matched_keywords": ["CHO", "cell culture", "intern"],
+  "changes_made": [
+    "Reordered Skills section to emphasize: Cell Culture, CHO Cells",
+    "Generated tailored professional summary using only matched, existing skills",
+    "Identified existing experience bullets most relevant to this role for emphasis"
+  ],
+  "warnings": [
+    "Job mentions keywords not found on your resume (do NOT add unless truthful): biologics, internship, process development, summer intern"
+  ]
+}

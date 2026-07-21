@@ -1,0 +1,53 @@
+student_name: ""
+school: "University of Maryland, College Park"
+major: "Bioengineering"
+minor: "Data Science"
+graduation_year: ""
+
+target_roles:
+  - Bioengineering Internship
+  - Biomedical Engineering Internship
+  - Biotechnology Internship
+  - Pharma Internship
+  - Medical Device Internship
+  - Healthcare Consulting Internship
+  - Life Sciences Consulting Internship
+  - Data Science Internship
+  - Healthcare Analytics Internship
+  - Regulatory Affairs Internship
+  - Quality Engineering Internship
+  - Process Engineering Internship
+  - Manufacturing Sciences Internship
+  - Product Intern
+  - Implementation Intern
+  - Solutions Engineering Intern
+  - Business Analyst Intern
+  - Strategy Analyst Intern
+  - Associate Consultant Intern
+
+preferred_locations:
+  - New York, NY
+  - New Jersey
+  - Maryland
+  - Washington, DC
+  - Boston, MA
+  - Remote
+  - Hybrid
+
+skills:
+  - Bioengineering
+  - Data Analysis
+  - Python
+  - Cell Culture
+  - CHO Cells
+  - Protein Production
+  - Regulatory Affairs
+  - Quality
+  - Healthcare Analytics
+  - Consulting
+
+experience_notes:
+  - NIH Vaccine Research Center internship
+  - Bioengineering coursework
+  - Data Science minor
+  - Research/lab exposure

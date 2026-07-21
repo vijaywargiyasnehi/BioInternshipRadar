@@ -1,0 +1,14 @@
+.env
+data/database.sqlite
+resumes/base/*.docx
+resumes/generated/
+resumes/archive/
+logs/
+exports/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+.DS_Store

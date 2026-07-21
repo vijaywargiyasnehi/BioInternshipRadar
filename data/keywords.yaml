@@ -1,0 +1,146 @@
+high_priority:
+  - internship
+  - intern
+  - co-op
+  - coop
+  - co op
+  - summer intern
+  - summer 2025
+  - summer 2026
+  - summer 2027
+  - 2025 internship
+  - 2026 internship
+  - 2027 internship
+  - university
+  - early career
+  - entry level
+  - new grad
+  - rotational program
+  - student trainee
+  - student researcher
+  - fellowship
+  - scholar
+  - undergraduate
+
+biotech_bioengineering:
+  - bioengineering
+  - biomedical engineering
+  - biomedical
+  - biotechnology
+  - biotech
+  - molecular biology
+  - cell biology
+  - cell culture
+  - CHO
+  - mammalian cell
+  - protein production
+  - protein expression
+  - protein purification
+  - vaccine
+  - mRNA
+  - biologics
+  - biologic
+  - antibody
+  - monoclonal
+  - gene therapy
+  - CRISPR
+  - cell therapy
+  - CAR-T
+  - process development
+  - upstream process
+  - downstream process
+  - bioprocess
+  - bioreactor
+  - fermentation
+  - manufacturing sciences
+  - biomanufacturing
+  - GMP
+  - cGMP
+  - quality assurance
+  - quality control
+  - quality engineering
+  - QA
+  - QC
+  - regulatory affairs
+  - regulatory
+  - FDA
+  - IND
+  - BLA
+  - NDA
+  - clinical
+  - clinical trial
+  - medical device
+  - med device
+  - device
+  - diagnostics
+  - in vitro
+  - in vivo
+  - pharma
+  - pharmaceutical
+  - pharmacology
+  - pharmacokinetics
+  - ADME
+  - life sciences
+  - laboratory
+  - assay development
+  - analytical chemistry
+  - formulation
+  - validation
+  - process validation
+  - tissue engineering
+  - biomaterials
+  - biomarker
+  - genomics
+  - proteomics
+  - sequencing
+  - flow cytometry
+  - microscopy
+  - ELISA
+
+data_healthtech:
+  - data science
+  - data scientist
+  - data analyst
+  - analytics
+  - computational biology
+  - bioinformatics
+  - machine learning
+  - deep learning
+  - artificial intelligence
+  - AI
+  - health data
+  - healthcare analytics
+  - health informatics
+  - real world evidence
+  - real world data
+  - clinical data
+  - health technology
+  - digital health
+  - product
+  - product manager
+  - implementation
+  - solutions engineer
+  - business analyst
+  - SQL
+  - Python
+  - R programming
+  - statistics
+  - epidemiology
+  - outcomes research
+
+consulting:
+  - consulting intern
+  - life sciences consultant
+  - healthcare consultant
+  - strategy analyst
+  - associate consultant
+  - business analyst
+  - summer associate
+  - summer analyst
+  - management consulting
+  - strategy consulting
+  - market access
+  - commercial strategy
+  - pricing analytics
+  - health economics
+  - HEOR
