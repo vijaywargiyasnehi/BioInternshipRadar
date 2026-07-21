@@ -1,6 +1,6 @@
 # Target companies for BioInternshipRadar.
 #
-# platform: greenhouse | lever | ashby | usajobs | workday | icims | company_static | unknown
+# platform: greenhouse | lever | ashby | workday | icims | company_static | unknown
 # board_id: Greenhouse token, Lever slug, or Ashby slug — scanner uses this directly,
 #           no career_url needed. Leave blank if unknown.
 #
@@ -12,20 +12,6 @@
 #   (own-ats)    — uses a proprietary career portal; requires manual monitoring
 
 companies:
-
-  # ---- Federal / Government ----
-  # USAJobs scanner automatically searches NIH, FDA, CDC, DoD, and all federal agencies.
-  # Requires free API key: https://developer.usajobs.gov  →  set USAJOBS_API_KEY + USAJOBS_EMAIL in .env
-  - name: "Federal Agencies (USAJobs)"
-    category: Federal / Government
-    platform: usajobs
-    board_id: ""
-    career_url: ""
-    internship_url: ""
-    network_contact: ""
-    priority: High
-    active: true
-    notes: "Auto-searches USAJobs.gov across NIH, FDA, CDC, BARDA, DoD, and more. Requires USAJOBS_API_KEY in .env."
 
   # ---- Bio Companies ----
   - name: Johnson & Johnson

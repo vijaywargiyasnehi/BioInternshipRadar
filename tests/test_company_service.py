@@ -29,14 +29,12 @@ def test_companies_missing_career_url(db_session):
     create_company(db_session, CompanyIn(name="No URL Co"))
     create_company(db_session, CompanyIn(name="Has URL Co", career_url="https://example.com/careers"))
     create_company(db_session, CompanyIn(name="Has Board ID Co", platform="greenhouse", board_id="sometoken"))
-    create_company(db_session, CompanyIn(name="USAJobs Co", platform="usajobs"))
 
     missing = companies_missing_career_url(db_session)
     missing_names = {c.name for c in missing}
     assert "No URL Co" in missing_names
     assert "Has URL Co" not in missing_names
     assert "Has Board ID Co" not in missing_names  # board_id counts as configured
-    assert "USAJobs Co" not in missing_names  # usajobs needs no URL
 
 
 def test_update_company(db_session):

@@ -46,9 +46,6 @@ class Settings(BaseSettings):
     export_dir: str = "exports"
     log_dir: str = "logs"
 
-    usajobs_api_key: str = ""
-    usajobs_email: str = ""
-
     internship_only: bool = True
 
     dashboard_url: str = "http://localhost:8501"

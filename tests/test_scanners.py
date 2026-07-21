@@ -7,7 +7,6 @@ from app.scanners.ashby_scanner import AshbyScanner
 from app.scanners.greenhouse_scanner import GreenhouseScanner, extract_board_token
 from app.scanners.lever_scanner import LeverScanner, extract_company_slug
 from app.scanners.scanner_router import detect_platform
-from app.scanners.usajobs_scanner import USAJobsScanner
 from app.scanners.workday_scanner import WorkdayScanner
 from app.scanners.icims_scanner import IcimsScanner
 
@@ -52,10 +51,6 @@ def test_detect_platform_infers_from_url():
 
 def test_detect_platform_unknown_without_url():
     assert detect_platform(_company(career_url="", internship_url="")) == "unknown"
-
-
-def test_detect_platform_explicit_usajobs():
-    assert detect_platform(_company(platform="usajobs")) == "usajobs"
 
 
 # ---------------------------------------------------------------------------
@@ -129,49 +124,6 @@ def test_ashby_scanner_parses_response():
     assert result.status == "success"
     assert result.candidates[0].job_title == "Biology Intern"
     assert result.candidates[0].source_platform == "ashby"
-
-
-# ---------------------------------------------------------------------------
-# USAJobs scanner
-# ---------------------------------------------------------------------------
-
-def test_usajobs_scanner_returns_manual_review_without_credentials(monkeypatch):
-    monkeypatch.setattr("app.config.settings.usajobs_api_key", "")
-    monkeypatch.setattr("app.config.settings.usajobs_email", "")
-    company = _company(platform="usajobs")
-    result = USAJobsScanner().scan_company(company)
-    assert result.status == "manual_review_required"
-    assert "USAJOBS_API_KEY" in result.error_message
-
-
-def test_usajobs_scanner_deduplicates_across_queries(monkeypatch):
-    monkeypatch.setattr("app.config.settings.usajobs_api_key", "fakekey")
-    monkeypatch.setattr("app.config.settings.usajobs_email", "test@example.com")
-
-    item = {
-        "MatchedObjectDescriptor": {
-            "PositionID": "UNIQUE-123",
-            "PositionTitle": "Bioengineering Intern",
-            "OrganizationName": "National Institutes of Health",
-            "PositionLocationDisplay": "Bethesda, MD",
-            "PublicationStartDate": "2025-06-01",
-            "QualificationSummary": "Must be enrolled in a degree program.",
-            "ApplyURI": ["https://www.usajobs.gov/job/UNIQUE-123"],
-        }
-    }
-
-    def fake_fetch(keyword, api_key, email):
-        return [item]
-
-    with patch("app.scanners.usajobs_scanner._fetch_usajobs", side_effect=fake_fetch):
-        company = _company(platform="usajobs")
-        result = USAJobsScanner().scan_company(company)
-
-    assert result.status == "success"
-    # The same PositionID should appear only once despite multiple search queries
-    ids = [c.job_url for c in result.candidates]
-    assert len(ids) == len(set(ids)), "Duplicate jobs were returned"
-    assert result.candidates[0].company_name == "National Institutes of Health"
 
 
 # ---------------------------------------------------------------------------

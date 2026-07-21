@@ -8,14 +8,12 @@ from app.scanners.icims_scanner import IcimsScanner
 from app.scanners.lever_scanner import LeverScanner, extract_company_slug
 from app.scanners.playwright_scanner import PlaywrightScanner
 from app.scanners.static_scanner import StaticScanner
-from app.scanners.usajobs_scanner import USAJobsScanner
 from app.scanners.workday_scanner import WorkdayScanner
 
 _SCANNERS: dict[str, BaseScanner] = {
     "greenhouse": GreenhouseScanner(),
     "lever": LeverScanner(),
     "ashby": AshbyScanner(),
-    "usajobs": USAJobsScanner(),
     "workday": WorkdayScanner(),
     "icims": IcimsScanner(),
     "company_static": StaticScanner(),

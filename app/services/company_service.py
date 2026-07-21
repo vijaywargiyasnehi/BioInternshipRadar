@@ -112,8 +112,6 @@ def deactivate_company(session: Session, company_id: int) -> None:
 
 def _is_scannable(c: Company) -> bool:
     """True if the company has enough config to attempt an automated scan."""
-    if c.platform == "usajobs":
-        return True
     if getattr(c, "board_id", None):
         return True
     return bool(c.career_url or c.internship_url)
