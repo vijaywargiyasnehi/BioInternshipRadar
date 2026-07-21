@@ -3,6 +3,15 @@
 Run via `python run_dashboard.py` (preferred) or `streamlit run app/dashboard.py`.
 Pages are implemented as plain functions for readability; each opens its own DB session.
 """
+# Ensure the repository root is on sys.path so `from app.*` imports work when
+# Streamlit executes this file directly (e.g. `streamlit run app/dashboard.py`).
+from pathlib import Path
+import sys
+
+_PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
 from datetime import datetime, timedelta
 
 import pandas as pd
